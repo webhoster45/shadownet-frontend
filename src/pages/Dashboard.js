@@ -1,38 +1,37 @@
 import { useState, useEffect } from "react";
 import { getVault } from "../utils/starknet";
 
+function shorten(addr) {
+  if (!addr) return "—";
+  return addr.slice(0, 6) + "..." + addr.slice(-4);
+}
+
 export default function Dashboard() {
   const [vaultId, setVaultId] = useState("");
   const [vault, setVault] = useState(null);
   const [status, setStatus] = useState("");
 
-  const [minting, setMinting] = useState(false);
-  const [mintStatus, setMintStatus] = useState("");
-  const [syntheticBalance, setSyntheticBalance] = useState(0);
-  const [btcLocked, setBtcLocked] = useState(0);
-
   const [userVaults, setUserVaults] = useState([]);
+    // === Synthetic Borrowing Demo ===
+  const [syntheticBalance, setSyntheticBalance] = useState(0);
+  const [minting, setMinting] = useState(false);
 
-  // load persisted balances + vault list
+
+  // Load vault list for this wallet
   useEffect(() => {
-    const bal = localStorage.getItem("syntheticBalance");
-    if (bal) setSyntheticBalance(Number(bal));
-
     const account = window.starknet?.account;
     if (!account) return;
 
     const key = `shadownet_vaults_${account.address}`;
-    const storedVaults =
-      JSON.parse(localStorage.getItem(key)) || [];
-
-    setUserVaults(storedVaults);
+    const stored = JSON.parse(localStorage.getItem(key)) || [];
+    setUserVaults(stored);
   }, []);
 
   async function handleLoadVault(idOverride) {
     const id = idOverride || vaultId;
 
     if (!id) {
-      setStatus("Enter a vault ID");
+      setStatus("Enter a Vault ID first.");
       return;
     }
 
@@ -42,152 +41,170 @@ export default function Dashboard() {
     try {
       const result = await getVault(id);
 
-setVault({
-  id,
-  owner: result.owner
-    ? result.owner.toString()
-    : "0x0",
-  commitment: result.commitment
-    ? result.commitment.toString()
-    : "0",
-});
+      const commitmentRaw = result.commitment
+        ? result.commitment.toString()
+        : "0";
 
+      setVault({
+        id,
+        owner: result.owner ? result.owner.toString() : "0x0",
+        commitment: commitmentRaw,
+        createdAt: Date.now(),
+      });
 
-      const btc = localStorage.getItem(`vault_btc_${id}`);
-      if (btc) setBtcLocked(Number(btc));
-
-      setStatus("Vault loaded");
+      setStatus("Vault loaded successfully ✔️");
     } catch (err) {
       console.error(err);
-      setStatus("Vault not found");
+      setStatus("Vault not found.");
     }
   }
-
+    // === Mint Synthetic Asset (Prototype UX) ===
   function mintSynthetic() {
     setMinting(true);
-    setMintStatus("Minting synthetic asset...");
 
     setTimeout(() => {
       const newBal = syntheticBalance + 1;
       setSyntheticBalance(newBal);
-      localStorage.setItem("syntheticBalance", newBal);
-
-      setMintStatus("✅ Synthetic asset minted (demo)");
       setMinting(false);
-    }, 1200);
+
+      setStatus("✅ Minted 1 sBTC (prototype demo)");
+    }, 1000);
+  }
+
+
+  function copyCommitment() {
+    if (!vault?.commitment) return;
+    navigator.clipboard.writeText(vault.commitment);
+    setStatus("Commitment copied to clipboard ✔️");
   }
 
   return (
     <div className="card">
-      <h2>Vault Control Panel</h2>
-      <p style={{ opacity: 0.7 }}>
-        Privacy-first vault management on Starknet
+      {/* HEADER */}
+      <h2 style={{ marginBottom: "4px" }}>
+        Private Vault Dashboard
+      </h2>
+
+      <p style={{ opacity: 0.75, fontSize: "13px" }}>
+        ShadowNet vaults store only cryptographic commitments on-chain.
+        Collateral and debt remain confidential.
       </p>
 
-      {/* Top Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "12px",
-          marginTop: "20px",
-          padding: "12px",
-        }}
-      >
-        <div className="panel">
-          <h4>Privacy Status</h4>
-          <p>
-            Private Mode
-            <br />
-            Vault state hidden behind cryptographic
-            commitments
-          </p>
-        </div>
-
-        <div className="panel">
-          <h4>Synthetic Balance</h4>
-          <p>
-            <strong>{syntheticBalance}</strong> sBTC
-          </p>
-          <p style={{ fontSize: "12px", opacity: 0.6 }}>
-            Demo balance · persisted locally
-          </p>
-        </div>
-      </div>
-
-      {/* Vault Lookup */}
-      <div className="panel" style={{ marginTop: "15px" }}>
+      {/* VAULT LOOKUP */}
+      <div className="panel" style={{ marginTop: "18px" }}>
         <h4>Load Vault</h4>
+
         <input
-          placeholder="Vault ID"
+          placeholder="Enter Vault ID"
           value={vaultId}
           onChange={(e) => setVaultId(e.target.value)}
         />
-        <button onClick={() => handleLoadVault()}>
-          Fetch Vault
+
+        <button
+          style={{ marginTop: "10px" }}
+          onClick={() => handleLoadVault()}
+        >
+          Fetch Vault from Starknet
         </button>
-        <p style={{ fontSize: "12px", opacity: 0.6 }}>
+
+        <p style={{ fontSize: "12px", opacity: 0.7 }}>
           {status}
         </p>
       </div>
 
-      {/* Vault Details */}
+      {/* VAULT DETAILS */}
       {vault && (
         <>
+          {/* METADATA CARD */}
+          <div className="panel" style={{ marginTop: "18px" }}>
+            <h4>Vault Overview</h4>
+
+            <p style={{ margin: "6px 0" }}>
+              <strong>Vault ID:</strong> #{vault.id}
+            </p>
+
+            <p style={{ margin: "6px 0" }}>
+              <strong>Owner:</strong> {shorten(vault.owner)}
+            </p>
+
+            <p style={{ margin: "6px 0" }}>
+              <strong>Status:</strong>{" "}
+              <span style={{ color: "#7CFF7C" }}>
+                Active · Commitment Stored ✔️
+              </span>
+            </p>
+
+            <p style={{ margin: "6px 0", fontSize: "12px", opacity: 0.7 }}>
+              Network: Starknet Sepolia
+            </p>
+          </div>
+
+          {/* COMMITMENT CARD */}
           <div className="panel" style={{ marginTop: "15px" }}>
-            <h4>Commitment</h4>
+            <h4>On-chain Commitment</h4>
+
             <code
               style={{
+                display: "block",
                 fontSize: "12px",
                 wordBreak: "break-all",
+                padding: "10px",
+                borderRadius: "8px",
+                background: "#111521",
               }}
             >
               {vault.commitment}
             </code>
-            <p style={{ fontSize: "12px", opacity: 0.6, marginTop: "6px" }}>
-  Commitment = H(collateral, nonce)
-</p>
 
+            <p style={{ fontSize: "12px", opacity: 0.65, marginTop: "6px" }}>
+              Commitment = H(collateral, debt, nonce)
+            </p>
+
+            <button
+              style={{ marginTop: "10px" }}
+              onClick={copyCommitment}
+            >
+              Copy Commitment
+            </button>
+          </div>
+          {/* === Borrowing UX Demo === */}
+          <div className="panel" style={{ marginTop: "15px" }}>
+            <h4>Borrowing (Prototype)</h4>
+
+            <p style={{ fontSize: "13px", opacity: 0.75 }}>
+              Mint a synthetic BTC asset to demonstrate private borrowing UX.
+            </p>
+
+            <button disabled={minting} onClick={mintSynthetic}>
+              {minting ? "Minting..." : "Mint sBTC (Demo)"}
+            </button>
+
+            <p style={{ marginTop: "10px", fontSize: "13px" }}>
+              <strong>Your sBTC Balance:</strong> {syntheticBalance}
+            </p>
+
+            <p style={{ fontSize: "12px", opacity: 0.6 }}>
+              In production, minting requires a ZK solvency proof.
+            </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "12px",
-              marginTop: "15px",
-            }}
-          >
-            <div className="panel">
-              <h4>BTC Locked</h4>
-              <p>
-                <strong>{btcLocked}</strong> BTC
-              </p>
-              <p style={{ fontSize: "12px", opacity: 0.6 }}>
-                Simulated collateral
-              </p>
-            </div>
+          {/* PROOF READY SECTION */}
+          <div className="panel" style={{ marginTop: "15px" }}>
+            <h4>🔐 Proof-Ready Layer</h4>
 
-            <div className="panel">
-              <h4>Actions</h4>
-              <button
-                disabled={minting}
-                onClick={mintSynthetic}
-              >
-                {minting
-                  ? "Minting..."
-                  : "Mint Synthetic Asset"}
-              </button>
-              <p style={{ fontSize: "12px", opacity: 0.6 }}>
-                {mintStatus ||
-                  "Minting is mocked in this demo"}
-              </p>
-            </div>
+            <p style={{ fontSize: "13px", opacity: 0.8 }}>
+              In production, users will generate a zero-knowledge proof
+              attesting solvency without revealing vault balances.
+            </p>
+
+            <button disabled style={{ opacity: 0.5, marginTop: "10px" }}>
+              Generate ZK Proof (Coming Soon)
+            </button>
           </div>
         </>
       )}
 
-      {/* === USER VAULTS LIST === */}
+      {/* USER VAULT LIST */}
       {userVaults.length > 0 && (
         <div className="panel" style={{ marginTop: "20px" }}>
           <h4>Your Vaults</h4>
@@ -195,9 +212,7 @@ setVault({
           {userVaults.map((v) => (
             <div
               key={v.vaultId}
-              onClick={() =>
-                handleLoadVault(v.vaultId)
-              }
+              onClick={() => handleLoadVault(v.vaultId)}
               style={{
                 padding: "10px",
                 borderBottom: "1px solid #222",
@@ -206,14 +221,8 @@ setVault({
             >
               <strong>Vault #{v.vaultId}</strong>
               <br />
-              <span
-                style={{
-                  fontSize: "12px",
-                  opacity: 0.6,
-                }}
-              >
-                BTC: {v.btcLocked} · Commitment:{" "}
-                {v.commitment.slice(0, 12)}...
+              <span style={{ fontSize: "12px", opacity: 0.65 }}>
+                Commitment: {v.commitment.slice(0, 14)}...
               </span>
             </div>
           ))}
