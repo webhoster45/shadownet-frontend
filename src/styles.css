@@ -1,0 +1,43 @@
+body {
+  background: #0b0e14;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+
+nav button {
+  margin: 5px;
+}
+
+.card {
+  background: #161a23;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 5px 0;
+  margin-bottom: 6px;
+}
+
+button {
+  padding: 10px;
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.vault-card {
+  margin-top: 10px;
+  padding: 10px;
+  background: #1f2430;
+}
+
