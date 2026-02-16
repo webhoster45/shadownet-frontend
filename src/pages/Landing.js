@@ -12,7 +12,7 @@ export default function Landing({ account }) {
           marginTop: "8px",
         }}
       >
-        Privacy-first collateralized vaults on Starknet
+        Confidential BTC-backed vaults for Starknet BTCFi
       </p>
 
       {/* === CORE DESCRIPTION === */}
@@ -27,21 +27,21 @@ export default function Landing({ account }) {
           opacity: 0.92,
         }}
       >
-<p>
-  Most BTCFi protocols expose collateral amounts and liquidation
-  thresholds. ShadowNet hides vault state by design using
-  cryptographic commitments.
-</p>
-
-        <p>
-          Instead of storing sensitive financial data, ShadowNet
-          records a single cryptographic commitment hash —
-          representing the vault’s private state.
+    <p>
+          BTCFi lending protocols today expose collateral amounts,
+          debt positions, and liquidation thresholds publicly.
         </p>
 
         <p>
-          This approach enables private DeFi primitives while
-          remaining verifiable and composable on Starknet.
+          ShadowNet introduces a vault primitive where BTC-backed
+          borrowing can exist without revealing sensitive vault state
+          on-chain.
+        </p>
+
+        <p>
+          Instead of storing balances, ShadowNet stores only a single
+          cryptographic commitment hash — representing the vault’s
+          private financial position.
         </p>
       </div>
 
@@ -58,9 +58,9 @@ export default function Landing({ account }) {
       >
         <strong>How ShadowNet works:</strong>
         <ul style={{ paddingLeft: "18px", marginTop: "8px" }}>
-          <li>BTC collateral is locked via a bridge (mocked)</li>
-          <li>Collateral & debt are encoded into a commitment</li>
-          <li>Only the commitment hash is stored on Starknet</li>
+          <li>BTC collateral enters Starknet via a bridge (mocked)</li>
+          <li>Collateral + debt state are encoded into a commitment</li>
+          <li>Only the commitment hash is stored publicly on-chain</li>
           <li>Vault interactions reference commitments, not balances</li>
         </ul>
       </div>
@@ -77,25 +77,25 @@ export default function Landing({ account }) {
     opacity: 0.9,
   }}
 >
-  <strong>🔐 Proof-Ready Architecture</strong>
+  <strong>🔐 ZK Upgrade Path</strong>
   <p style={{ marginTop: "8px", lineHeight: "1.6" }}>
-    ShadowNet stores only a cryptographic commitment on-chain.
-    No collateral amounts, debt ratios, or liquidation thresholds
-    are publicly revealed.
+ShadowNet is built around a commitment-based vault model:
+          Starknet verifies vault existence without learning the
+          collateral amount, debt ratio, or liquidation boundary.
   </p>
 
   <p style={{ marginTop: "8px", lineHeight: "1.6" }}>
-    In a production system:
+In a production-grade BTCFi system:
   </p>
 
   <ul style={{ paddingLeft: "18px", marginTop: "6px" }}>
-    <li>Users generate a zero-knowledge proof off-chain</li>
-    <li>The proof attests to solvency and collateralization</li>
-    <li>Starknet verifies the proof without revealing vault state</li>
+ <li>Users generate a solvency proof off-chain</li>
+          <li>The proof attests the vault is safely collateralized</li>
+          <li>Starknet verifies it without revealing private values</li>
   </ul>
 
   <p style={{ marginTop: "8px", opacity: 0.8 }}>
-    This prototype focuses on the base commitment layer.
+    This prototype ships the base vault commitment layer.
   </p>
 </div>
 
@@ -110,13 +110,14 @@ export default function Landing({ account }) {
       >
         <strong>Prototype status:</strong>
         <br />
-        • Vault creation: <span style={{ color: "#7CFF7C" }}>Live on Starknet Sepolia</span>
+        • Vault commitment storage:{" "} <span style={{ color: "#7CFF7C" }}>Live on Starknet Sepolia</span>
         <br />
-        • BTC collateral: Mocked
+        • BTC bridge: Mocked for demo flow
         <br />
-        • Synthetic minting: Mocked (UX demo)
+        • Synthetic minting: Mocked UX prototype
         <br />
-        • Privacy layer: Conceptual / architecture demo
+        • Next step: ZK solvency verification
+
       </div>
 
       <hr style={{ margin: "22px 0", opacity: 0.2 }} />
@@ -144,7 +145,7 @@ export default function Landing({ account }) {
         </div>
       ) : (
         <p style={{ opacity: 0.75 }}>
-          Connect your Starknet wallet to create a private vault.
+Connect your Starknet wallet to open a BTC-backed vault.
         </p>
       )}
     </div>
