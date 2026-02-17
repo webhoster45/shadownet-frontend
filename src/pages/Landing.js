@@ -12,7 +12,7 @@ export default function Landing({ account }) {
           marginTop: "8px",
         }}
       >
-        Confidential BTC-backed vaults for Starknet BTCFi
+Confidential vault commitments for privacy-preserving DeFi on Starknet
       </p>
 
       {/* === CORE DESCRIPTION === */}
@@ -28,8 +28,7 @@ export default function Landing({ account }) {
         }}
       >
     <p>
-          BTCFi lending protocols today expose collateral amounts,
-          debt positions, and liquidation thresholds publicly.
+DeFi lending exposes collateral, debt, and liquidation risk to the entire world.
         </p>
 
         <p>
@@ -58,8 +57,8 @@ export default function Landing({ account }) {
       >
         <strong>How ShadowNet works:</strong>
         <ul style={{ paddingLeft: "18px", marginTop: "8px" }}>
-          <li>BTC collateral enters Starknet via a bridge (mocked)</li>
-          <li>Collateral + debt state are encoded into a commitment</li>
+          <li>Users create a vault and generate a commitment</li>
+          <li>Vault state is encoded into a cryptographic hash</li>
           <li>Only the commitment hash is stored publicly on-chain</li>
           <li>Vault interactions reference commitments, not balances</li>
         </ul>
@@ -85,7 +84,7 @@ ShadowNet is built around a commitment-based vault model:
   </p>
 
   <p style={{ marginTop: "8px", lineHeight: "1.6" }}>
-In a production-grade BTCFi system:
+In a production-grade system:
   </p>
 
   <ul style={{ paddingLeft: "18px", marginTop: "6px" }}>
@@ -95,7 +94,7 @@ In a production-grade BTCFi system:
   </ul>
 
   <p style={{ marginTop: "8px", opacity: 0.8 }}>
-    This prototype ships the base vault commitment layer.
+This prototype delivers the base commitment layer required for private DeFi
   </p>
 </div>
 
@@ -145,7 +144,7 @@ In a production-grade BTCFi system:
         </div>
       ) : (
         <p style={{ opacity: 0.75 }}>
-Connect your Starknet wallet to open a BTC-backed vault.
+Connect your Starknet wallet to open a Confidential vault
         </p>
       )}
     </div>
