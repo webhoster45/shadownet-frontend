@@ -1,0 +1,40 @@
+[
+  {
+    "type": "function",
+    "name": "create_vault",
+    "inputs": [
+      {
+        "name": "vault_id",
+        "type": "core::felt252"
+      },
+      {
+        "name": "commitment",
+        "type": "core::felt252"
+      }
+    ],
+    "outputs": [],
+    "state_mutability": "external"
+  },
+  {
+    "type": "function",
+    "name": "get_vault",
+    "inputs": [
+      {
+        "name": "vault_id",
+        "type": "core::felt252"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "(core::felt252, core::felt252)"
+      }
+    ],
+    "state_mutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "shadownet::ShadowNet::Event",
+    "kind": "enum",
+    "variants": []
+  }
+]

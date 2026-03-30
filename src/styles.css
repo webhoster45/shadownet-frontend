@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f7;
+  --bg-tertiary: #ebebf0;
+  
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --text-inverse: #ffffff;
+  
+  --border-light: rgba(0, 0, 0, 0.08);
+  --border-focus: #000000;
+  
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+/* Minimalism Card */
+.card, .panel, .glass-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 32px;
+  margin-top: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover, .panel:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+h1, h2, h3, h4 {
+  margin-top: 0;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+h1 { font-size: 44px; letter-spacing: -1px; }
+h2 { font-size: 26px; }
+h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+
+p {
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 16px 20px;
+  margin: 8px 0 16px;
+  background: var(--bg-secondary);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+input:focus {
+  background: var(--bg-primary);
+  border-color: var(--border-focus);
+}
+
+/* Buttons */
+button {
+  padding: 14px 24px;
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 980px; /* Apple pill shape */
+  cursor: pointer;
+  font-weight: 500;
+  font-family: inherit;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.secondary-btn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+/* Code & Pre blocks */
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-light) !important;
+  padding: 16px !important;
+  border-radius: 12px;
+  display: block;
+  font-size: 13px !important;
+  color: var(--text-primary) !important;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Badges */
+.badge-starknet, .badge-ipfs, .badge-zk {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  padding: 4px 10px;
+  border-radius: 980px;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  letter-spacing: 0.2px;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* Utility Nav Buttons */
+.nav-links {
+  background: var(--bg-primary);
+  border-radius: 980px;
+  padding: 4px;
+  display: flex;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.nav-link {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  margin: 0;
+}
+.nav-link:hover {
+  background: transparent;
+  color: var(--text-primary);
+}
+.nav-link.active {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.wallet-btn {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-light) !important;
+  font-size: 14px !important;
+  padding: 10px 20px !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
